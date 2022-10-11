@@ -3,11 +3,18 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-
+    public static void main(String[] args) throws IOException {
+        File textFile = new File("src/textFile.txt");
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
         int[] prices = {100, 200, 300};
+
         Basket basket = new Basket(products, prices);
+
+        if (textFile.exists()){
+            Basket.loadFromTxtFile(textFile);
+            System.out.println(basket.printCart());
+        }//todo иначе если файла нет
+
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -15,13 +22,7 @@ public class Main {
             String input = scanner.nextLine();
 
             if ("end".equals(input)) {
-                System.out.println("Ваша корзина");
-                for (int i = 0; i < products.length; i++) {
-                    if (quantity[i] >= 1) {
-                        System.out.println(products[i] + " " + quantity[i] + " шт " + prices[i] + " руб/шт " + quantityProduct[i] + " руб в сумме ");
-                    }
-                }
-                System.out.println("Итого: " + Arrays.stream(quantityProduct).sum() + " руб");
+               System.out.println(basket.printCart());
                 break;
             }
 
@@ -34,7 +35,7 @@ public class Main {
 
                 int product = Integer.parseInt(parts[0]);
 
-                if ((0 >= product) || (product >= products.length)) {
+                if ((0 >= product) || (product >= products.length+1)) {
                     System.out.println("В параметре надо указать коректный товар " + product);
                     continue;
                 }
@@ -47,38 +48,16 @@ public class Main {
                     continue;
                 }
 
-                basket.addToCart(product,pricesOne);
-
+                basket.addToCart(product, pricesOne);
+                basket.saveTxt(textFile);
             } catch (NumberFormatException e) {
                 System.out.println("Нужно ввести два числа, а вы ввели " + input);
                 continue;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 }
 
 
-if (product < (products.length + 1) && product >= 0) {
-        quantity[product] += pricesOne;
-        int currentPrice = prices[product];
-        quantityProduct[product] = quantity[product] * currentPrice;
-        } else {
-        System.out.println("Такого товара нет");
-
-
-
-
-
-
-
-
-//    File textFile = new File("src/textFile.txt");
-//    PrintWriter out = new PrintWriter(textFile);
-//        out.println();
-//        out.close();
-//
-//    InputStream in = new FileInputStream(textFile);
-//    Scanner scanner1 = new Scanner(in);
-//    String name = scanner1.nextLine();
-//    String[] asd = scanner1.nextLine().split("");
-//
