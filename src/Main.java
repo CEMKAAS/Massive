@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        File textFile = new File("src/textFile.txt");
+        File textFile = new File("src/basket.bin");
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
         int[] prices = {100, 200, 300};
 

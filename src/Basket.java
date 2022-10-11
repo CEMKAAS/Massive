@@ -69,9 +69,11 @@ public class Basket {
             return print.toString();
         }
 
+    public saveBin(File file){}
 
-
-
+    static loadFromBinFile(File file){
+        
+    }
     }
 
 
