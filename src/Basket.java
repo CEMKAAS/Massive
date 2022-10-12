@@ -2,23 +2,30 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Basket {
-    String[] products;
-    int[] prices;
-
-    static int[] quantity= new int[5];
-    static int[] quantityProduct = new int[5];
+public class Basket implements Serializable {
+    private String[] products;
+    private int[] prices;
+    private int[] quantity;
+    private int[] quantityProduct;
 
 
     public Basket (String[] products, int[] prices) throws FileNotFoundException {
         this.prices = prices;
         this.products = products;
+        this.quantity= new int[prices.length];
+        this.quantityProduct = new int[prices.length];
     }
+    public void setCount(int[] quantity) {
+        this.quantity = quantity;
+    }
+    public void setCount2(int[] quantityProduct) {
+        this.quantityProduct = quantityProduct;
+    }
+
 
 
    public void addToCart(int productNum, int amount){
        if (productNum < (products.length + 1) && productNum >= 0) {
-
            quantity[productNum] += amount;
            int currentPrice = prices[productNum];
            quantityProduct[productNum] = quantity[productNum] * currentPrice;
@@ -26,35 +33,9 @@ public class Basket {
            System.out.println("Такого товара нет");
        }
    }
-    public void saveTxt(File textFile) throws IOException {
-        try (PrintWriter out = new PrintWriter(textFile);) {
 
-            for (int e : quantity)
-                if (e != 0) {
-                    out.print(e + " ");
-                }
-            out.print("\n");
-            for (int a : quantityProduct)
-                if (a != 0) {
-                    out.print(a + " ");
-                }
-        }
-    }
+    protected void printCart () {
 
-
-    static Basket loadFromTxtFile(File textFile) throws FileNotFoundException {
-        InputStream in = new FileInputStream(textFile);
-        Scanner scanner1 = new Scanner(in);
-        String[] asd = scanner1.nextLine().split(" ");
-        String[] asd1 = scanner1.nextLine().split(" ");
-        for (int i = 0; i < asd.length; i++) {
-            quantity[i] = Integer.parseInt(asd[i]);
-            quantityProduct[i] = Integer.parseInt(asd1[i]);
-        }
-        return null;
-    }
-
-    public String printCart () {
             StringBuilder print = new StringBuilder();
             print.append("Ваша корзина");
             print.append("\n");
@@ -62,19 +43,33 @@ public class Basket {
                 if (quantity[i] >= 1) {
                     print.append(products[i] + " " + quantity[i] + " шт " + prices[i] + " руб/шт " + quantityProduct[i] + " руб в сумме ");
                     print.append("\n");
+                    setCount(quantity);
+                    setCount2(quantityProduct);
                 }
             }
             print.append("Итого: " + Arrays.stream(quantityProduct).sum() + " руб");
 
-            return print.toString();
+        System.out.println(print.toString());
         }
 
-    public saveBin(File file){}
+    public void saveBin(File binFile ) {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(binFile ))) {
+            objectOutputStream.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    static loadFromBinFile(File file){
-        
+    public static Basket loadBinFile(File binFile) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(binFile))) {
+            Basket basket = (Basket) objectInputStream.readObject();
+            System.out.print("В вашей корзине было" + "\n");
+            basket.printCart();
+            return basket;
+        }
+
     }
-    }
+}
 
 
 
