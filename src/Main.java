@@ -13,8 +13,10 @@ public class Main {
         if (textFile.exists()){
             Basket.loadFromTxtFile(textFile);
             System.out.println(basket.printCart());
-        }//todo иначе если файла нет
-
+        } else {System.out.println("Список возможных товаров для покупки");
+        for (int i = 0; i < products.length; i++) {
+            System.out.println((i + 1) + "." + " " + products[i] + " " + prices[i] + " руб/шт");
+        }}
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
