@@ -22,9 +22,15 @@ public class Basket implements Serializable {
         this.quantityProduct = quantityProduct;
     }
 
+    public int[] getQuantity() {
+        return quantity;
+    }
 
+    public int[] getQuantityProduct() {
+        return quantityProduct;
+    }
 
-   public void addToCart(int productNum, int amount){
+    public void addToCart(int productNum, int amount){
        if (productNum < (products.length + 1) && productNum >= 0) {
            quantity[productNum] += amount;
            int currentPrice = prices[productNum];
@@ -64,6 +70,8 @@ public class Basket implements Serializable {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(binFile))) {
             Basket basket = (Basket) objectInputStream.readObject();
             System.out.print("В вашей корзине было" + "\n");
+            basket.getQuantity();
+            basket.getQuantityProduct();
             basket.printCart();
             return basket;
         }

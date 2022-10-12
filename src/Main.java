@@ -13,7 +13,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         if (binFile.exists()) {
-            Basket.loadBinFile(binFile);
+            basket.loadBinFile(binFile);
         } else {
             System.out.println("Список возможных товаров для покупки");
             for (int i = 0; i < products.length; i++) {
