@@ -12,7 +12,6 @@ public class Main {
 
         if (textFile.exists()){
             Basket.loadFromTxtFile(textFile);
-            System.out.println(basket.printCart());
         } else {System.out.println("Список возможных товаров для покупки");
         for (int i = 0; i < products.length; i++) {
             System.out.println((i + 1) + "." + " " + products[i] + " " + prices[i] + " руб/шт");
@@ -24,7 +23,7 @@ public class Main {
             String input = scanner.nextLine();
 
             if ("end".equals(input)) {
-               System.out.println(basket.printCart());
+               basket.printCart();
                 break;
             }
 
