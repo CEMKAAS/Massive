@@ -36,7 +36,6 @@ public class Basket implements Serializable {
     }
 
 
-
     public void saveTxt(File textFile) throws IOException {
         try (PrintWriter out = new PrintWriter(textFile)) {
             for (String e : products) {

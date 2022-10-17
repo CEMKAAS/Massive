@@ -10,12 +10,14 @@ public class Main {
 
         Basket basket = new Basket(products, prices);
 
-        if (textFile.exists()){
+        if (textFile.exists()) {
             Basket.loadFromTxtFile(textFile);
-        } else {System.out.println("Список возможных товаров для покупки");
-        for (int i = 0; i < products.length; i++) {
-            System.out.println((i + 1) + "." + " " + products[i] + " " + prices[i] + " руб/шт");
-        }}
+        } else {
+            System.out.println("Список возможных товаров для покупки");
+            for (int i = 0; i < products.length; i++) {
+                System.out.println((i + 1) + "." + " " + products[i] + " " + prices[i] + " руб/шт");
+            }
+        }
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -23,7 +25,7 @@ public class Main {
             String input = scanner.nextLine();
 
             if ("end".equals(input)) {
-               basket.printCart();
+                basket.printCart();
                 break;
             }
 
@@ -36,7 +38,7 @@ public class Main {
 
                 int product = Integer.parseInt(parts[0]);
 
-                if ((0 >= product) || (product >= products.length+1)) {
+                if ((0 >= product) || (product >= products.length + 1)) {
                     System.out.println("В параметре надо указать коректный товар " + product);
                     continue;
                 }
