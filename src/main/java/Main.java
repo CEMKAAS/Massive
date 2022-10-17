@@ -30,6 +30,7 @@ public class Main {
             }
         }
     }
+
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -45,7 +46,7 @@ public class Main {
 
         node(doc, "load");
         if (enabled.equals("true")) {
-            File textFile = new File(fileName+"."+format);
+            File textFile = new File(fileName + "." + format);
             if (textFile.exists()) {
                 if (format.equals("json")) {
                     Basket.loadFromJSONFile(textFile);
@@ -93,14 +94,16 @@ public class Main {
 
                 node(doc, "save");
                 if (enabled.equals("true")) {
-                    File textFile = new File(fileName+"."+format);
+                    File textFile = new File(fileName + "." + format);
                     basket.addToCart(product, pricesOne);
                     if (format.equals("json")) {
                         basket.saveJSON(textFile);
                     } else {
                         basket.saveTxt(textFile);
                     }
-                } else {basket.addToCart(product, pricesOne);}
+                } else {
+                    basket.addToCart(product, pricesOne);
+                }
 
                 node(doc, "log");
                 if (enabled.equals("true")) {
@@ -108,8 +111,7 @@ public class Main {
                     clientLog.log(product, pricesOne);
                     clientLog.exportAsCSV(textFile);
                 }
-            } catch (
-                    NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Нужно ввести два числа, а вы ввели " + input);
                 continue;
 
