@@ -1,6 +1,5 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -42,26 +41,20 @@ public class Basket implements Serializable {
         }
     }
 
+
     public void saveJSON(File textFile) throws IOException {
-        JSONObject obj = new JSONObject();
+
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
+        Basket basket = new Basket(products, quantityProduct);
+        basket.setQuantity(quantity);
+        basket.setQuantityProduct(quantityProduct);
+        gson.toJson(basket);
 
-        JSONArray listOne = new JSONArray();
-        JSONArray listTwo = new JSONArray();
-        JSONArray lisThree = new JSONArray();
-
-        lisThree.add(gson.toJson(products));
-        obj.put("product", lisThree);
-
-        listOne.add(gson.toJson(quantity));
-        obj.put("productNum", listOne);
-
-        listTwo.add(gson.toJson(quantityProduct));
-        obj.put("amount", listTwo);
 
         try (FileWriter file = new FileWriter(textFile)) {
-            file.write(obj.toJSONString());
+            file.write(gson.toJson(basket));
+
             file.flush();
         }
     }
@@ -84,40 +77,17 @@ public class Basket implements Serializable {
 
     public static Basket loadFromJSONFile(File textFile) throws FileNotFoundException {
         JSONParser parser = new JSONParser();
-        String as = null;
-        String as2 = null;
-        String as3 = null;
+
         try {
             Object obj = parser.parse(new FileReader(textFile));
             JSONObject jsonObject = (JSONObject) obj;
 
-            JSONArray amount = (JSONArray) jsonObject.get("amount");
-            JSONArray productNum = (JSONArray) jsonObject.get("productNum");
-            JSONArray product = (JSONArray) jsonObject.get("product");
+            String jsonText = jsonObject.toJSONString();
 
-            for (Object am : amount) {
-                as = am.toString();
-            }
-            for (Object am : productNum) {
-                as2 = am.toString();
-            }
-            for (Object am : product) {
-                as3 = am.toString();
-            }
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
 
-            String[] productJSON = as3.replace("]", "").replace("[", "").split(",");
-            String[] quantityJSON = as2.replace("]", "").replace("[", "").split(",");
-            String[] quantityProductJSON = as.replace("]", "").replace("[", "").split(",");
-
-            int[] quantity = new int[quantityJSON.length];
-            int[] quantityProduct = new int[quantityProductJSON.length];
-            for (int i = 0; i < quantityJSON.length; i++) {
-                quantity[i] = Integer.parseInt(quantityJSON[i]);
-                quantityProduct[i] = Integer.parseInt(quantityProductJSON[i]);
-            }
-            Basket basket = new Basket(productJSON, quantityProduct);
-            basket.setQuantity(quantity);
-            basket.setQuantityProduct(quantityProduct);
+            Basket basket = gson.fromJson(jsonText, Basket.class);
             basket.printCart();
             return basket;
         } catch (IOException e) {
