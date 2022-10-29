@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -75,27 +76,22 @@ public class Basket implements Serializable {
         }
     }
 
-    public static Basket loadFromJSONFile(File textFile) throws FileNotFoundException {
-        JSONParser parser = new JSONParser();
-
+    public static Basket loadFromJSONFile(File textFile){
         try {
-            Object obj = parser.parse(new FileReader(textFile));
-            JSONObject jsonObject = (JSONObject) obj;
-
-            String jsonText = jsonObject.toJSONString();
-
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-
-            Basket basket = gson.fromJson(jsonText, Basket.class);
+            InputStream in = new FileInputStream(textFile);
+            Scanner scanner = new Scanner(in);
+            Gson gson = new Gson();
+            String line = scanner.nextLine();
+            Basket basket = gson.fromJson(line, Basket.class);
             basket.printCart();
             return basket;
-        } catch (IOException e) {
+        } catch (JsonSyntaxException e) {
             throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     static Basket loadFromTxtFile(File textFile) throws FileNotFoundException {
         InputStream in = new FileInputStream(textFile);
